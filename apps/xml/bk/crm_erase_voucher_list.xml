@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestCase>
+<selenese>
+	<command>open</command>
+	<target><![CDATA[{link}]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+<selenese>
+	<command>click</command>
+	<target><![CDATA[id=s_swepi_1]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+<selenese>
+	<command>type</command>
+	<target><![CDATA[id=s_swepi_1]]></target>
+	<value><![CDATA[{username}]]></value>
+</selenese>
+<selenese>
+	<command>type</command>
+	<target><![CDATA[id=s_swepi_2]]></target>
+	<value><![CDATA[{password}]]></value>
+</selenese>
+<selenese>
+	<command>click</command>
+	<target><![CDATA[id=s_swepi_22]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+<selenese>
+	<command>click</command>
+	<target><![CDATA[id=s_2_1_14_0_Ctrl]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+<selenese>
+	<command>click</command>
+	<target><![CDATA[id=1Interaction_Type]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+<selenese>
+	<command>type</command>
+	<target><![CDATA[id=1_Interaction_Type]]></target>
+	<value><![CDATA[{interaction_type}]]></value>
+</selenese>
+<selenese>
+	<command>click</command>
+	<target><![CDATA[id=1INS_Product]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+<selenese>
+	<command>type</command>
+	<target><![CDATA[id=1_INS_Product]]></target>
+	<value><![CDATA[{ins_product}]]></value>
+</selenese>
+<selenese>
+	<command>click</command>
+	<target><![CDATA[id=1INSArea]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+<selenese>
+	<command>type</command>
+	<target><![CDATA[id=1_INSArea]]></target>
+	<value><![CDATA[{ins_area}]]></value>
+</selenese>
+<selenese>
+	<command>click</command>
+	<target><![CDATA[id=1INS_Sub-Area]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+<selenese>
+	<command>type</command>
+	<target><![CDATA[id=1_INS_Sub-Area]]></target>
+	<value><![CDATA[{ins_sub_area}]]></value>
+</selenese>
+<selenese>
+	<command>click</command>
+	<target><![CDATA[id=1Status]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+<selenese>
+	<command>type</command>
+	<target><![CDATA[id=1_Status]]></target>
+	<value><![CDATA[{ins_status}]]></value>
+</selenese>
+<selenese>
+	<command>click</command>
+	<target><![CDATA[id=s_2_1_11_0_Ctrl]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+</TestCase>

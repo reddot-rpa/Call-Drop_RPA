@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestCase>
+<selenese>
+	<command>open</command>
+	<target><![CDATA[http://10.101.3.113:5555/pretups/]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+<selenese>
+	<command>click</command>
+	<target><![CDATA[id=loginID]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+<selenese>
+	<command>type</command>
+	<target><![CDATA[id=loginID]]></target>
+	<value><![CDATA[zahid50000104_NA]]></value>
+</selenese>
+<selenese>
+	<command>type</command>
+	<target><![CDATA[id=password]]></target>
+	<value><![CDATA[Robi4Robi44]]></value>
+</selenese>
+<selenese>
+	<command>click</command>
+	<target><![CDATA[name=submit1]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+</TestCase>

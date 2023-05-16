@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestCase>
+<selenese>
+	<command>open</command>
+	<target><![CDATA[http://localhost/python/sample/pythonread.html]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+<selenese>
+	<command>click</command>
+	<target><![CDATA[//table[@id='data3']/tbody/tr/td]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+</TestCase>

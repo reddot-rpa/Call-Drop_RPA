@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestCase>
+<selenese>
+	<command>open</command>
+	<target><![CDATA[https://workflow.robi.com.bd/sysrobiworkflow/en/robiux/init/login]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+<selenese>
+	<command>click</command>
+	<target><![CDATA[id=login_field]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+<selenese>
+	<command>type</command>
+	<target><![CDATA[id=login_field]]></target>
+	<value><![CDATA[finance_rpa]]></value>
+</selenese>
+<selenese>
+	<command>click</command>
+	<target><![CDATA[id=password]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+<selenese>
+	<command>type</command>
+	<target><![CDATA[id=password]]></target>
+	<value><![CDATA[Pass*12345]]></value>
+</selenese>
+<selenese>
+	<command>click</command>
+	<target><![CDATA[name=commit]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+<selenese>
+	<command>open</command>
+	<target><![CDATA[https://workflow.robi.com.bd/sysrobiworkflow/en/robiux/init/open?id={app_id}&index={del_index}&action=todo]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+</TestCase>

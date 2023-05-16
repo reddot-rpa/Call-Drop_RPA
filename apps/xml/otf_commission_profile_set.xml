@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestCase>
+<selenese>
+	<command>selectFrame</command>
+	<target><![CDATA[index=0]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+<selenese>
+	<command>click</command>
+	<target><![CDATA[link=Profile management]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+<selenese>
+	<command>click</command>
+	<target><![CDATA[name=domainCode]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+<selenese>
+	<command>type</command>
+	<target><![CDATA[name=domainCode]]></target>
+	<value><![CDATA[{domain}]]></value>
+</selenese>
+<selenese>
+	<command>click</command>
+	<target><![CDATA[name=categoryCode]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+<selenese>
+	<command>type</command>
+	<target><![CDATA[name=categoryCode]]></target>
+	<value><![CDATA[{category}]]></value>
+</selenese>
+<selenese>
+	<command>click</command>
+	<target><![CDATA[name=edit]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+<selenese>
+	<command>click</command>
+	<target><![CDATA[name=selectCommProfileSetID]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+<selenese>
+	<command>type</command>
+	<target><![CDATA[name=selectCommProfileSetID]]></target>
+	<value><![CDATA[{profile}]]></value>
+</selenese>
+<selenese>
+	<command>click</command>
+	<target><![CDATA[name=selectCommProifleVersionID]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+<selenese>
+	<command>click</command>
+	<target><![CDATA[name=edit]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+</TestCase>

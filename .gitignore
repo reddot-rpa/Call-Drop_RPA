@@ -1,0 +1,15 @@
+/venv/
+/venvx/
+/idea/
+/.idea/
+/dist/
+/.dist/
+/build/
+/process_files/
+/webdrivers/drivers/
+/workflow/logs/
+chromedriver.exe
+/files/
+/workflow/__pycache__/
+/utils/__pycache__/
+/apps/__pycache__/

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestCase>
+<selenese>
+	<command>open</command>
+	<target><![CDATA[http://pos.bhuyianhost.com/sales/report]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+<selenese>
+	<command>click</command>
+	<target><![CDATA[id=email]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+<selenese>
+	<command>type</command>
+	<target><![CDATA[id=email]]></target>
+	<value><![CDATA[{email}]]></value>
+</selenese>
+<selenese>
+	<command>type</command>
+	<target><![CDATA[id=password]]></target>
+	<value><![CDATA[{password}]]></value>
+</selenese>
+<selenese>
+	<command>click</command>
+	<target><![CDATA[//button[@type='submit']]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+</TestCase>

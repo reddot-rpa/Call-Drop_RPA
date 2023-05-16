@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestCase>
+<selenese>
+	<command>open</command>
+	<target><![CDATA[https://c1.robi.com.bd/ecommunications_enu/start.swe?SWECmd=GotoView&SWEView=Service+Request+Screen+Homepage+View&SWERF=1&SWEHo=c1.robi.com.bd&SWEBU=1]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+<selenese>
+	<command>click</command>
+	<target><![CDATA[css=input[name='s_6_1_19_0']]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+<selenese>
+	<command>type</command>
+	<target><![CDATA[css=input[name='s_6_1_19_0']]]></target>
+	<value><![CDATA[{sr_id}]]></value>
+</selenese>
+<selenese>
+	<command>click</command>
+	<target><![CDATA[id=s_6_1_18_0_Ctrl]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+<selenese>
+	<command>click</command>
+	<target><![CDATA[xpath=(//*[@id="1SR_Number"]/a)]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+<selenese>
+	<command>click</command>
+	<target><![CDATA[id=s_vctrl_div_tabScreen]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+<selenese>
+	<command>click</command>
+	<target><![CDATA[xpath=(//a[text()="Smart Script"])]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+</TestCase>

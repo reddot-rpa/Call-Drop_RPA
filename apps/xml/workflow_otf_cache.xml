@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestCase>
+	<selenese>
+		<command>open</command>
+		<target><![CDATA[https://workflow.robi.com.bd/sysrobiworkflow/en/robiux/init/login]]></target>
+		<value><![CDATA[]]></value>
+	</selenese>
+	<selenese>
+		<command>click</command>
+		<target><![CDATA[id=login_field]]></target>
+		<value><![CDATA[]]></value>
+	</selenese>
+	<selenese>
+		<command>type</command>
+		<target><![CDATA[id=login_field]]></target>
+		<value><![CDATA[{username}]]></value>
+	</selenese>
+	<selenese>
+		<command>click</command>
+		<target><![CDATA[id=password]]></target>
+		<value><![CDATA[]]></value>
+	</selenese>
+	<selenese>
+		<command>type</command>
+		<target><![CDATA[id=password]]></target>
+		<value><![CDATA[{password}]]></value>
+	</selenese>
+	<selenese>
+		<command>click</command>
+		<target><![CDATA[name=commit]]></target>
+		<value><![CDATA[]]></value>
+	</selenese>
+	<selenese>
+		<command>open</command>
+		<target><![CDATA[https://workflow.robi.com.bd/sysrobiworkflow/en/robiux/cases/cases_Open?ux=ROBIUX&APP_UID={app_id}&DEL_INDEX={del_index}&action=todo]]></target>
+		<value><![CDATA[]]></value>
+	</selenese>
+	<selenese>
+		<command>click</command>
+		<target><![CDATA[id=form[OTF_cache_updated][OTF Cache Updated]]]></target>
+		<value><![CDATA[]]></value>
+	</selenese>
+	<selenese>
+		<command>click</command>
+		<target><![CDATA[id=form[Remarks_for_line]]]></target>
+		<value><![CDATA[]]></value>
+	</selenese>
+	<selenese>
+		<command>type</command>
+		<target><![CDATA[id=form[Remarks_for_line]]]></target>
+		<value><![CDATA[Successfully Updated]]></value>
+	</selenese>
+	<selenese>
+		<command>click</command>
+		<target><![CDATA[id=form[submit]]]></target>
+		<value><![CDATA[]]></value>
+	</selenese>
+</TestCase>

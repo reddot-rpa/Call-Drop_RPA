@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestCase>
+<selenese>
+	<command>open</command>
+	<target><![CDATA[{link}]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+<selenese>
+	<command>click</command>
+	<target><![CDATA[name=domainType]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+<selenese>
+	<command>type</command>
+	<target><![CDATA[name=domainType]]></target>
+	<value><![CDATA[Red]]></value>
+</selenese>
+<selenese>
+	<command>type</command>
+	<target><![CDATA[name=username]]></target>
+	<value><![CDATA[{username}]]></value>
+</selenese>
+<selenese>
+	<command>type</command>
+	<target><![CDATA[name=password]]></target>
+	<value><![CDATA[{password}]]></value>
+</selenese>
+<selenese>
+	<command>click</command>
+	<target><![CDATA[//button[@type='submit']]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+
+<selenese>
+	<command>open</command>
+	<target><![CDATA[https://dcrm.robi.com.bd/dcrm/bulk/prepaid/uploadprepaidfile]]></target>
+	<value><![CDATA[]]></value>
+</selenese>
+</TestCase>
+

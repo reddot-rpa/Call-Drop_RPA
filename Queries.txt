@@ -1,0 +1,67 @@
+pyinstaller --add-data E:\Rayhan_development\Call-Drop-RPA\venvx\Lib\site-packages\autoit\lib\AutoItX3_x64.dll;autoit\lib --onefile workflow/main.py --name call_drop_rebate --clean
+
+pyinstaller --add-data E:\Rayhan_development\Call-Drop-RPA\venvx\Lib\site-packages\autoit\lib\AutoItX3_x64.dll;autoit\lib --onefile workflow/send_sms.py --name call_drop_rebate_send_sms --clean
+
+## Database Size ##
+select ROUND(sum(bytes)/1024/1024/1024,2) GB
+from user_segments
+where tablespace_name='TBS_RPA' and segment_name in ('CALL_DROP_FILE_LOG','CALL_DROP_SMS_LOG_ROBI','CALL_DROP_SMS_LOG_AIRTEL','CALL_DROP_RPA_STATUS_FLAG');
+
+## SMS SENT OR NOT FOR MSISDN ##
+select MSISDN,AMOUNT,SMS_STATUS,FILE_NAME,CREATE_TIME from CALL_DROP_SMS_LOG_ROBI where MSISDN = '8801833301552';
+select MSISDN,AMOUNT,SMS_STATUS,FILE_NAME,CREATE_TIME from CALL_DROP_SMS_LOG_AIRTEL where MSISDN = '8801678690779';
+
+## DUPLICACY CHECK FOR MSISDN ##
+select MSISDN, Count(*) as COUNT from CALL_DROP_SMS_LOG_ROBI Group By MSISDN;
+select MSISDN, Count(*) as COUNT from CALL_DROP_SMS_LOG_AIRTEL Group By MSISDN;
+
+## EXTRACTING DATA BASED ON TODAYS SYS DATE ##
+Select *  from CALL_DROP_SMS_LOG_ROBI 
+where trunc(create_time)=trunc(sysdate);
+Select *  from CALL_DROP_SMS_LOG_AIRTEL 
+where trunc(create_time)=trunc(sysdate);
+
+## DAILY SMS SENT & PENDING BASED ON FILE ##
+SELECT file_name , sms_status, count(*) as Count
+FROM CALL_DROP_SMS_LOG_AIRTEL
+where trunc(create_time)=trunc(sysdate)
+group by file_name , sms_status
+order by file_name , sms_status
+;
+SELECT file_name , sms_status, count(*) as Count
+FROM CALL_DROP_SMS_LOG_ROBI
+where trunc(create_time)=trunc(sysdate)
+group by file_name , sms_status
+order by file_name , sms_status
+;
+
+## FILE BASED SMS SENT & PENDING STATUS ##
+Select SMS_STATUS, Count(*) From CALL_DROP_SMS_LOG_ROBI 
+Where FILE_NAME = 'call_drop_rebate_prepaid_20220130_2.csv' --and SMS_STATUS = 'Pending' and 
+and trunc(create_time)=trunc(sysdate)
+group by SMS_STATUS;
+
+
+
+
+
+
+# Monthly Report
+SELECT TRANSDATE
+,SUM( CASE WHEN BRAND='ROBI' THEN SMS_COUNT ELSE 0 END ) ROBI_SMS_COUNT
+,SUM( CASE WHEN BRAND='AIRTEL' THEN SMS_COUNT ELSE 0 END ) AIRTEL_SMS_COUNT
+,( SUM( CASE WHEN BRAND='ROBI' THEN SMS_COUNT ELSE 0 END ) + SUM( CASE WHEN BRAND='AIRTEL' THEN SMS_COUNT ELSE 0 END )
+) TOAL_SMS_COUNT
+FROM (
+SELECT TRUNC(CREATE_TIME) TRANSDATE, 'ROBI' BRAND ,COUNT(*) SMS_COUNT
+FROM CALL_DROP_SMS_LOG_ROBI
+WHERE TRUNC(CREATE_TIME)>=TO_DATE('02-JUN-2022') AND TRUNC(CREATE_TIME)<=TO_DATE('01-JUL-2022')
+GROUP BY TRUNC(CREATE_TIME)
+UNION ALL
+SELECT TRUNC(CREATE_TIME) TRANSDATE, 'AIRTEL' BRAND ,COUNT(*) SMS_COUNT
+FROM CALL_DROP_SMS_LOG_AIRTEL
+WHERE TRUNC(CREATE_TIME)>=TO_DATE('02-JUN-2022') AND TRUNC(CREATE_TIME)<=TO_DATE('01-JUL-2022')
+GROUP BY TRUNC(CREATE_TIME)
+)
+GROUP BY TRANSDATE
+ORDER BY TRANSDATE;
