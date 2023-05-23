@@ -3500,9 +3500,9 @@ class Helper:
             missing_dates = self.check_previous_missing_dates()
             if len(missing_dates) > 0:
                 self.send_previous_missing_dates_to_dev(missing_dates)
-            todays_date = dt.date.today()
+            today_date = dt.date.today()
             final_report_date = conf['final_report_date']
-            is_final_date = todays_date.day == final_report_date
+            is_final_date = today_date.day == final_report_date
             if is_final_date:
                 self.log.log_info("Sending final report mail")
                 self.send_final_monthly_report()
