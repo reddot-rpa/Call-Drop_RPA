@@ -3260,6 +3260,122 @@ class Helper:
     def generate_report(self):
         pass
 
+    def update_daily_mail_status_to_file(self, total_unique_subscribe_robi, total_unique_subscribe_airtel):
+        month_name = datetime.now().strftime('%B')
+        filename = f"monthly_report_{month_name}.xlsx"
+        if os.path.exists(filename):
+            df = pd.read_csv(filename, index_col=False)
+            dic = {
+                "DATE": dt.date.today(),
+                "ROBI": total_unique_subscribe_robi,
+                "AIRTEL": total_unique_subscribe_airtel,
+                "TOTAL": total_unique_subscribe_robi + total_unique_subscribe_airtel
+            }
+            df = pd.concat([df, pd.DataFrame([dic])])
+            df.to_csv(filename, index=False)
+        else:
+            dic = {
+                "DATE": dt.date.today(),
+                "ROBI": total_unique_subscribe_robi,
+                "AIRTEL": total_unique_subscribe_airtel,
+                "TOTAL": total_unique_subscribe_robi + total_unique_subscribe_airtel
+            }
+            print("File Creating")
+            self.log.log_info(f"Monthly report file creating for Month: {month_name}")
+            df = pd.DataFrame([dic])
+            df.to_csv(filename, index=False)
+
+    @staticmethod
+    def check_missing_dates(filename):
+        df = pd.read_csv(filename, index_col=False)
+        df['DATE'] = pd.to_datetime(df['DATE'])
+        today = dt.date.today()
+        start_date = dt.date(today.year, today.month - 1, 1)
+        first_day_of_month = dt.date(today.year, today.month, 1)
+        end_date = first_day_of_month - dt.timedelta(days=1)
+        all_dates = pd.date_range(start=start_date, end=end_date)
+        missing_dates = list(set(all_dates) - set(df['DATE']))
+        missing_dates.sort()
+        return missing_dates
+
+    @staticmethod
+    def send_final_reprot_mail():
+        mail = Mail()
+        conf = ConfigParser()
+        current_date = dt.date.today()
+        previous_month = current_date.replace(day=1) - datetime.timedelta(days=1)
+        previous_month_year = previous_month.year
+        previous_month_name = previous_month.strftime('%B')
+        filename = f"monthly_report_{previous_month_name}.xlsx"
+        attachments = [filename]
+        targets = conf.get_call_drop_report_email_to()
+        mail_title = f"CALL DROP FINAL REPORT - {previous_month_name}, {previous_month_year}"
+        mail_body = f"""<p>Dear Holy Apu, <br><br> I hope you are doing well. As per request, I have attached the Call Drop Rebate Report for the Month of {previous_month_name}, {previous_month_year} with this email.</p><br>
+                    <p>Regards, <br> Automated Call Drop Rebate System</p>"""
+        mail.send_mail_to(targets, None, mail_title, mail_body, attachments)
+        mail.send()
+
+    @staticmethod
+    def send_missing_dates_to_dev(missing_dates):
+        mail = Mail()
+        conf = ConfigParser()
+        current_date = dt.date.today()
+        previous_month = current_date.replace(day=1) - datetime.timedelta(days=1)
+        previous_month_year = previous_month.year
+        previous_month_name = previous_month.strftime('%B')
+        filename = f"monthly_report_{previous_month_name}.xlsx"
+        attachments = [filename]
+        targets = conf.get_error_reporting_email()
+        date_string = ', '.join(str(date.date()) for date in missing_dates)
+        mail_title = f"CALL DROP FINAL REPORT - {previous_month_name}, {previous_month_year}"
+        mail_body = f"""<p>Dear Concern, <br><br> RPA might not send email in those following days - {date_string}. Please check the attacment and do neccesary steps.</p><br>
+                            <p>Regards, <br> Automated Call Drop Rebate System</p>"""
+        mail.send_mail_to(targets, None, mail_title, mail_body, attachments)
+        mail.send()
+
+    @staticmethod
+    def send_previous_missing_dates_to_dev(missing_dates):
+        mail = Mail()
+        conf = ConfigParser()
+        current_date = dt.date.today()
+        current_year = current_date.year
+        month_name = current_date.strftime('%B')
+        filename = f"monthly_report_{month_name}.xlsx"
+        attachments = [filename]
+        targets = conf.get_error_reporting_email()
+        date_string = ', '.join(str(date.date()) for date in missing_dates)
+        mail_title = f"CALL DROP FINAL REPORT - {month_name}, {current_year}"
+        mail_body = f"""<p>Dear Concern, <br><br> RPA might not send email in those following days - {date_string}. Please check the attacment and do neccesary steps.</p><br>
+                            <p>Regards, <br> Automated Call Drop Rebate System</p>"""
+        mail.send_mail_to(targets, None, mail_title, mail_body, attachments)
+        mail.send()
+
+    def send_final_monthly_report(self):
+        current_date = dt.date.today()
+        previous_month = current_date.replace(day=1) - datetime.timedelta(days=1)
+        previous_month_name = previous_month.strftime('%B')
+        filename = f"monthly_report_{previous_month_name}.xlsx"
+        if os.path.exists(filename):
+            missing_dates = self.check_missing_dates(filename)
+            if len(missing_dates) == 0:
+                self.send_final_reprot_mail()
+            else:
+                self.send_missing_dates_to_dev(missing_dates)
+
+    @staticmethod
+    def check_previous_missing_dates(filename):
+        month_name = datetime.now().strftime('%B')
+        filename = f"monthly_report_{month_name}.xlsx"
+        df = pd.read_csv(filename, index_col=False)
+        df['DATE'] = pd.to_datetime(df['DATE'])
+        today = dt.date.today()
+        start_date = dt.date(today.year, today.month, 1)
+        end_date = today - dt.timedelta(days=1)
+        all_dates = pd.date_range(start=start_date, end=end_date)
+        missing_dates = list(set(all_dates) - set(df['DATE']))
+        missing_dates.sort()
+        return missing_dates
+
     def send_mail(self):
         mail = Mail()
         conf = ConfigParser()
@@ -3377,8 +3493,19 @@ class Helper:
             update_query = "update CALL_DROP_RPA_STATUS_FLAG set MAIL_STATUS='Mail_Sent', MAIL_SEND_DATE='" + mail_send_date + "' where DEFAULT_EMAIL='calldrop@robi.com.bd'"
             db_object.execute_query(query=update_query)
             # Send sms to concern
-            msisdn_list = ['8801833184089', '8801833184087']
+            msisdn_list = ['8801833184089', '8801833184087', '8801833183769']
             crm_api_object.smsapi(msisdn=msisdn_list, message="Call Drop Rebate Email Mail Sent!")
+            self.update_daily_mail_status_to_file(total_unique_subscribe_robi, total_unique_subscribe_airtel)
+            self.log.log_info("Checking Previous missing dates ")
+            missing_dates = self.check_previous_missing_dates()
+            if len(missing_dates) > 0:
+                self.send_previous_missing_dates_to_dev(missing_dates)
+            todays_date = dt.date.today()
+            final_report_date = conf['final_report_date']
+            is_final_date = todays_date.day == final_report_date
+            if is_final_date:
+                self.log.log_info("Sending final report mail")
+                self.send_final_monthly_report()
 
     def upload_file_dcrm(self, xlsx_file_name, xlsx_file_dir_name):
         try:
