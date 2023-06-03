@@ -5,7 +5,7 @@ block_cipher = None
 
 
 a = Analysis(['workflow\\send_sms.py'],
-             pathex=['E:\\Rayhan_development\\Call-Drop-RPA'],
+             pathex=['E:\\Sunjid_development\\Call-Drop-RPA'],
              binaries=[],
              datas=[('E:\\Rayhan_development\\Call-Drop-RPA\\venvx\\Lib\\site-packages\\autoit\\lib\\AutoItX3_x64.dll', 'autoit\\lib')],
              hiddenimports=[],

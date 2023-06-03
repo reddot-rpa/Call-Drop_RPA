@@ -3262,20 +3262,26 @@ class Helper:
 
     def update_daily_mail_status_to_file(self, total_unique_subscribe_robi, total_unique_subscribe_airtel):
         month_name = datetime.now().strftime('%B')
-        filename = f"monthly_report_{month_name}.xlsx"
+        if dt.date.today().day == 1:
+            current_date = dt.date.today()
+            previous_month = current_date.replace(day=1) - dt.timedelta(days=1)
+            previous_month_name = previous_month.strftime('%B')
+            filename = f"monthly_report_{previous_month_name}.xlsx"
+        else:
+            filename = f"monthly_report_{month_name}.xlsx"
         if os.path.exists(filename):
-            df = pd.read_csv(filename, index_col=False)
+            df = pd.read_excel(filename, index_col=False)
             dic = {
-                "DATE": dt.date.today(),
+                "DATE": dt.date.today() - dt.timedelta(days=1),
                 "ROBI": total_unique_subscribe_robi,
                 "AIRTEL": total_unique_subscribe_airtel,
                 "TOTAL": total_unique_subscribe_robi + total_unique_subscribe_airtel
             }
             df = pd.concat([df, pd.DataFrame([dic])])
-            df.to_csv(filename, index=False)
+            df.to_excel(filename, index=False)
         else:
             dic = {
-                "DATE": dt.date.today(),
+                "DATE": dt.date.today() - dt.timedelta(days=1),
                 "ROBI": total_unique_subscribe_robi,
                 "AIRTEL": total_unique_subscribe_airtel,
                 "TOTAL": total_unique_subscribe_robi + total_unique_subscribe_airtel
@@ -3283,11 +3289,11 @@ class Helper:
             print("File Creating")
             self.log.log_info(f"Monthly report file creating for Month: {month_name}")
             df = pd.DataFrame([dic])
-            df.to_csv(filename, index=False)
+            df.to_excel(filename, index=False)
 
     @staticmethod
     def check_missing_dates(filename):
-        df = pd.read_csv(filename, index_col=False)
+        df = pd.read_excel(filename, index_col=False)
         df['DATE'] = pd.to_datetime(df['DATE'])
         today = dt.date.today()
         start_date = dt.date(today.year, today.month - 1, 1)
@@ -3303,7 +3309,7 @@ class Helper:
         mail = Mail()
         conf = ConfigParser()
         current_date = dt.date.today()
-        previous_month = current_date.replace(day=1) - datetime.timedelta(days=1)
+        previous_month = current_date.replace(day=1) - dt.timedelta(days=1)
         previous_month_year = previous_month.year
         previous_month_name = previous_month.strftime('%B')
         filename = f"monthly_report_{previous_month_name}.xlsx"
@@ -3320,7 +3326,7 @@ class Helper:
         mail = Mail()
         conf = ConfigParser()
         current_date = dt.date.today()
-        previous_month = current_date.replace(day=1) - datetime.timedelta(days=1)
+        previous_month = current_date.replace(day=1) - dt.timedelta(days=1)
         previous_month_year = previous_month.year
         previous_month_name = previous_month.strftime('%B')
         filename = f"monthly_report_{previous_month_name}.xlsx"
@@ -3352,7 +3358,7 @@ class Helper:
 
     def send_final_monthly_report(self):
         current_date = dt.date.today()
-        previous_month = current_date.replace(day=1) - datetime.timedelta(days=1)
+        previous_month = current_date.replace(day=1) - dt.timedelta(days=1)
         previous_month_name = previous_month.strftime('%B')
         filename = f"monthly_report_{previous_month_name}.xlsx"
         if os.path.exists(filename):
@@ -3361,20 +3367,24 @@ class Helper:
                 self.send_final_reprot_mail()
             else:
                 self.send_missing_dates_to_dev(missing_dates)
+        else:
+            self.log.log_error(f"FIle: {filename} not found")
 
-    @staticmethod
-    def check_previous_missing_dates(filename):
+    def check_previous_missing_dates(self):
         month_name = datetime.now().strftime('%B')
         filename = f"monthly_report_{month_name}.xlsx"
-        df = pd.read_csv(filename, index_col=False)
-        df['DATE'] = pd.to_datetime(df['DATE'])
-        today = dt.date.today()
-        start_date = dt.date(today.year, today.month, 1)
-        end_date = today - dt.timedelta(days=1)
-        all_dates = pd.date_range(start=start_date, end=end_date)
-        missing_dates = list(set(all_dates) - set(df['DATE']))
-        missing_dates.sort()
-        return missing_dates
+        try:
+            df = pd.read_excel(filename, index_col=False)
+            df['DATE'] = pd.to_datetime(df['DATE'])
+            today = dt.date.today()
+            start_date = dt.date(today.year, today.month, 1)
+            end_date = today - dt.timedelta(days=1)
+            all_dates = pd.date_range(start=start_date, end=end_date)
+            missing_dates = list(set(all_dates) - set(df['DATE']))
+            missing_dates.sort()
+            return missing_dates
+        except Exception as e:
+            self.log.log_error(f"File: {filename} not found")
 
     def send_mail(self):
         mail = Mail()
@@ -3501,7 +3511,7 @@ class Helper:
             if len(missing_dates) > 0:
                 self.send_previous_missing_dates_to_dev(missing_dates)
             today_date = dt.date.today()
-            final_report_date = conf['final_report_date']
+            final_report_date = AppUtils.conf['final_report_date']
             is_final_date = today_date.day == final_report_date
             if is_final_date:
                 self.log.log_info("Sending final report mail")

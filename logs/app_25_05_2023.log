@@ -1,0 +1,57 @@
+2023-05-25 11:17:20,939 - utils.logger - INFO - Loading Database Configuration Files....
+2023-05-25 11:17:22,124 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): apigate.robi.com.bd:443
+2023-05-25 11:17:22,215 - urllib3.connectionpool - DEBUG - https://apigate.robi.com.bd:443 "POST /token HTTP/1.1" 200 None
+2023-05-25 11:17:22,218 - utils.logger - INFO - Response received from MIFE
+2023-05-25 11:17:22,220 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): apigate.robi.com.bd:443
+2023-05-25 11:17:22,299 - urllib3.connectionpool - DEBUG - https://apigate.robi.com.bd:443 "POST /token HTTP/1.1" 200 None
+2023-05-25 11:17:22,301 - utils.logger - INFO - Response received from MIFE
+2023-05-25 11:17:22,302 - utils.logger - INFO - Loading Database Configuration Files....
+2023-05-25 11:17:25,307 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): apigate.robi.com.bd:443
+2023-05-25 11:17:25,394 - urllib3.connectionpool - DEBUG - https://apigate.robi.com.bd:443 "POST /token HTTP/1.1" 200 None
+2023-05-25 11:17:25,395 - utils.logger - INFO - Response received from MIFE
+2023-05-25 11:17:25,397 - utils.logger - WARNING - <class 'NoneType'>
+2023-05-25 11:17:25,398 - utils.logger - INFO - Attempting ORCL Connection
+2023-05-25 11:17:28,437 - utils.logger - INFO - Initiated Query = select * from CALL_DROP_RPA_STATUS_FLAG where DEFAULT_EMAIL='calldrop@robi.com.bd'
+2023-05-25 11:17:28,528 - utils.logger - INFO - Query Response - [('Pending', 'Pending', None, '20230524', 'calldrop@robi.com.bd')]
+2023-05-25 11:17:28,529 - utils.logger - INFO - Query Successful
+2023-05-25 11:17:28,552 - utils.logger - INFO - Success Response Received from APPSMSC : MSISDN - 8801833184089, MSG - Call+Drop+SMS+RPA+Started., RESPONSE - Operation success: 1EB98026B
+2023-05-25 11:17:28,566 - utils.logger - INFO - Success Response Received from APPSMSC : MSISDN - 8801833184087, MSG - Call+Drop+SMS+RPA+Started., RESPONSE - Operation success: 1EB980292
+2023-05-25 11:17:28,585 - utils.logger - INFO - Success Response Received from APPSMSC : MSISDN - 8801833183769, MSG - Call+Drop+SMS+RPA+Started., RESPONSE - Operation success: 1EB9802B5
+2023-05-25 11:17:28,585 - utils.logger - INFO - Attempting Query = update CALL_DROP_RPA_STATUS_FLAG set SENT_SMS_RPA_STATUS='Running' where DEFAULT_EMAIL='calldrop@robi.com.bd'
+2023-05-25 11:17:28,585 - utils.logger - INFO - Attempting ORCL Connection
+2023-05-25 11:17:29,082 - utils.logger - INFO - Execution Successful
+2023-05-25 11:17:29,084 - utils.logger - INFO - Start_time = 00:00:00
+End_time = 23:59:00
+Time_now = 11:17:29
+
+2023-05-25 11:17:29,084 - utils.logger - INFO - Attempting ORCL Connection
+2023-05-25 11:17:29,568 - utils.logger - INFO - Initiated Query = SELECT * FROM CALL_DROP_SMS_LOG_ROBI WHERE SMS_STATUS='Pending' FETCH NEXT 1000 ROWS ONLY
+2023-05-25 11:17:30,899 - utils.logger - INFO - Query Response - []
+2023-05-25 11:17:30,899 - utils.logger - CRITICAL - Query Failed
+2023-05-25 11:17:30,899 - utils.logger - INFO - Attempting ORCL Connection
+2023-05-25 11:17:31,197 - utils.logger - INFO - Initiated Query = SELECT * FROM CALL_DROP_SMS_LOG_AIRTEL WHERE SMS_STATUS = 'Pending' FETCH NEXT 1000 ROWS ONLY
+2023-05-25 11:17:31,820 - utils.logger - INFO - Query Response - []
+2023-05-25 11:17:31,820 - utils.logger - CRITICAL - Query Failed
+2023-05-25 11:17:31,822 - utils.logger - INFO - Attempting ORCL Connection
+2023-05-25 11:17:32,385 - utils.logger - INFO - Initiated Query = select * from CALL_DROP_RPA_STATUS_FLAG where DEFAULT_EMAIL='calldrop@robi.com.bd'
+2023-05-25 11:17:32,475 - utils.logger - INFO - Query Response - [('Pending', 'Running', None, '20230524', 'calldrop@robi.com.bd')]
+2023-05-25 11:17:32,475 - utils.logger - INFO - Query Successful
+2023-05-25 11:17:32,475 - utils.logger - INFO - Attempting ORCL Connection
+2023-05-25 11:17:32,756 - utils.logger - INFO - Initiated Query = select count(*) from CALL_DROP_SMS_LOG_ROBI where SMS_STATUS like 'Pending%'
+2023-05-25 11:17:36,810 - utils.logger - INFO - Query Response - [(0,)]
+2023-05-25 11:17:36,811 - utils.logger - INFO - Query Successful
+2023-05-25 11:17:36,811 - utils.logger - INFO - Attempting ORCL Connection
+2023-05-25 11:17:37,201 - utils.logger - INFO - Initiated Query = select count(*) from CALL_DROP_SMS_LOG_AIRTEL where SMS_STATUS like 'Pending%'
+2023-05-25 11:17:39,327 - utils.logger - INFO - Query Response - [(0,)]
+2023-05-25 11:17:39,327 - utils.logger - INFO - Query Successful
+2023-05-25 11:17:39,327 - utils.logger - INFO - Attempting ORCL Connection
+2023-05-25 11:17:39,729 - utils.logger - INFO - Initiated Query = SELECT * FROM CALL_DROP_FILE_LOG WHERE FILE_NAME LIKE '%20230524%'
+2023-05-25 11:17:39,846 - utils.logger - INFO - Query Response - []
+2023-05-25 11:17:39,846 - utils.logger - CRITICAL - Query Failed
+2023-05-25 11:17:39,848 - utils.logger - CRITICAL - 'int' object is not iterable
+2023-05-25 11:17:39,848 - utils.logger - INFO - Attempting Query = update CALL_DROP_RPA_STATUS_FLAG set SENT_SMS_RPA_STATUS='Pending' where DEFAULT_EMAIL='calldrop@robi.com.bd'
+2023-05-25 11:17:39,848 - utils.logger - INFO - Attempting ORCL Connection
+2023-05-25 11:17:40,721 - utils.logger - INFO - Execution Successful
+2023-05-25 11:17:40,734 - utils.logger - INFO - Success Response Received from APPSMSC : MSISDN - 8801833184089, MSG - Call+Drop+SMS+RPA+Done., RESPONSE - Operation success: 1EB98A682
+2023-05-25 11:17:40,747 - utils.logger - INFO - Success Response Received from APPSMSC : MSISDN - 8801833184087, MSG - Call+Drop+SMS+RPA+Done., RESPONSE - Operation success: 1EB98A699
+2023-05-25 11:17:40,760 - utils.logger - INFO - Success Response Received from APPSMSC : MSISDN - 8801833183769, MSG - Call+Drop+SMS+RPA+Done., RESPONSE - Operation success: 1EB98A6AD
