@@ -92,6 +92,14 @@ class ConfigParser:
         to = self.conf['call_drop_email_to']
         return to.split(',')
 
+    def get_call_drop_final_report_email_to(self):
+        to = self.conf['call_drop_final_email_to']
+        return to.split(',')
+
+    def get_call_drop_final_report_email_cc(self):
+        to = self.conf['call_drop_final_email_cc']
+        return to.split(',')
+
     def get_call_drop_sms_to_concern(self):
         to = self.conf['call_drop_sms_to_concern']
         return to.split(',')

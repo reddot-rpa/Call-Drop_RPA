@@ -3272,7 +3272,7 @@ class Helper:
         if os.path.exists(filename):
             df = pd.read_excel(filename, index_col=False)
             dic = {
-                "DATE": dt.date.today() - dt.timedelta(days=1),
+                "DATE": dt.date.today() - dt.timedelta(days=AppUtils.conf['previous_email_day']),
                 "ROBI": total_unique_subscribe_robi,
                 "AIRTEL": total_unique_subscribe_airtel,
                 "TOTAL": total_unique_subscribe_robi + total_unique_subscribe_airtel
@@ -3281,7 +3281,7 @@ class Helper:
             df.to_excel(filename, index=False)
         else:
             dic = {
-                "DATE": dt.date.today() - dt.timedelta(days=1),
+                "DATE": dt.date.today() - dt.timedelta(days=AppUtils.conf['previous_email_day']),
                 "ROBI": total_unique_subscribe_robi,
                 "AIRTEL": total_unique_subscribe_airtel,
                 "TOTAL": total_unique_subscribe_robi + total_unique_subscribe_airtel
@@ -3315,10 +3315,11 @@ class Helper:
         filename = f"monthly_report_{previous_month_name}.xlsx"
         attachments = [filename]
         targets = conf.get_call_drop_report_email_to()
+        cc = conf.get_call_drop_final_report_email_cc()
         mail_title = f"CALL DROP FINAL REPORT - {previous_month_name}, {previous_month_year}"
         mail_body = f"""<p>Dear Holy Apu, <br><br> I hope you are doing well. As per request, I have attached the Call Drop Rebate Report for the Month of {previous_month_name}, {previous_month_year} with this email.</p><br>
                     <p>Regards, <br> Automated Call Drop Rebate System</p>"""
-        mail.send_mail_to(targets, None, mail_title, mail_body, attachments)
+        mail.send_mail_to(targets, cc, mail_title, mail_body, attachments)
         mail.send()
 
     @staticmethod
@@ -3333,7 +3334,7 @@ class Helper:
         attachments = [filename]
         targets = conf.get_error_reporting_email()
         date_string = ', '.join(str(date.date()) for date in missing_dates)
-        mail_title = f"CALL DROP FINAL REPORT - {previous_month_name}, {previous_month_year}"
+        mail_title = f"CALL DROP MISSED REPORT - {previous_month_name}, {previous_month_year}"
         mail_body = f"""<p>Dear Concern, <br><br> RPA might not send email in those following days - {date_string}. Please check the attacment and do neccesary steps.</p><br>
                             <p>Regards, <br> Automated Call Drop Rebate System</p>"""
         mail.send_mail_to(targets, None, mail_title, mail_body, attachments)
@@ -3350,7 +3351,7 @@ class Helper:
         attachments = [filename]
         targets = conf.get_error_reporting_email()
         date_string = ', '.join(str(date.date()) for date in missing_dates)
-        mail_title = f"CALL DROP FINAL REPORT - {month_name}, {current_year}"
+        mail_title = f"CALL DROP MISSED REPORT - {month_name}, {current_year}"
         mail_body = f"""<p>Dear Concern, <br><br> RPA might not send email in those following days - {date_string}. Please check the attacment and do neccesary steps.</p><br>
                             <p>Regards, <br> Automated Call Drop Rebate System</p>"""
         mail.send_mail_to(targets, None, mail_title, mail_body, attachments)
