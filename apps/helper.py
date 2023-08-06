@@ -3262,13 +3262,18 @@ class Helper:
 
     def update_daily_mail_status_to_file(self, total_unique_subscribe_robi, total_unique_subscribe_airtel):
         month_name = datetime.now().strftime('%B')
+        year = datetime.now().strftime('%Y')
+        file_dir = AppUtils.conf['final_reports_dir']
+        if not os.path.exists(file_dir) or not os.path.isdir(file_dir):
+            os.mkdir(file_dir)
         if dt.date.today().day == 1:
             current_date = dt.date.today()
             previous_month = current_date.replace(day=1) - dt.timedelta(days=1)
             previous_month_name = previous_month.strftime('%B')
-            filename = f"monthly_report_{previous_month_name}.xlsx"
+            previous_year_name = previous_month.strftime('%Y')
+            filename = f"{file_dir}monthly_report_{previous_month_name}_{previous_year_name}.xlsx"
         else:
-            filename = f"monthly_report_{month_name}.xlsx"
+            filename = f"{file_dir}monthly_report_{month_name}_{year}.xlsx"
         if os.path.exists(filename):
             df = pd.read_excel(filename, index_col=False)
             dic = {
@@ -3305,16 +3310,25 @@ class Helper:
         return missing_dates
 
     @staticmethod
-    def send_final_reprot_mail():
+    def sort_report(filename):
+        df = pd.read_excel(filename, index_col=False)
+        df_sorted = df.sort_values('DATE')
+        df_sorted['DATE'] = df_sorted['DATE'].dt.strftime('%Y-%m-%d')
+        df_sorted.to_excel(filename, index=False)
+
+    def send_final_reprot_mail(self):
         mail = Mail()
         conf = ConfigParser()
         current_date = dt.date.today()
         previous_month = current_date.replace(day=1) - dt.timedelta(days=1)
         previous_month_year = previous_month.year
         previous_month_name = previous_month.strftime('%B')
-        filename = f"monthly_report_{previous_month_name}.xlsx"
+        previous_year_name = previous_month.strftime('%Y')
+        file_dir = AppUtils.conf['final_reports_dir']
+        filename = f"{file_dir}monthly_report_{previous_month_name}_{previous_year_name}.xlsx"
+        self.sort_report(filename)
         attachments = [filename]
-        targets = conf.get_call_drop_report_email_to()
+        targets = conf.get_call_drop_final_report_email_to()
         cc = conf.get_call_drop_final_report_email_cc()
         mail_title = f"CALL DROP FINAL REPORT - {previous_month_name}, {previous_month_year}"
         mail_body = f"""<p>Dear Holy Apu, <br><br> I hope you are doing well. As per request, I have attached the Call Drop Rebate Report for the Month of {previous_month_name}, {previous_month_year} with this email.</p><br>
@@ -3330,7 +3344,9 @@ class Helper:
         previous_month = current_date.replace(day=1) - dt.timedelta(days=1)
         previous_month_year = previous_month.year
         previous_month_name = previous_month.strftime('%B')
-        filename = f"monthly_report_{previous_month_name}.xlsx"
+        previous_year_name = previous_month.strftime('%Y')
+        file_dir = AppUtils.conf['final_reports_dir']
+        filename = f"{file_dir}monthly_report_{previous_month_name}_{previous_year_name}.xlsx"
         attachments = [filename]
         targets = conf.get_error_reporting_email()
         date_string = ', '.join(str(date.date()) for date in missing_dates)
@@ -3347,7 +3363,9 @@ class Helper:
         current_date = dt.date.today()
         current_year = current_date.year
         month_name = current_date.strftime('%B')
-        filename = f"monthly_report_{month_name}.xlsx"
+        year = current_date.strftime('%Y')
+        file_dir = AppUtils.conf['final_reports_dir']
+        filename = f"{file_dir}monthly_report_{month_name}_{year}.xlsx"
         attachments = [filename]
         targets = conf.get_error_reporting_email()
         date_string = ', '.join(str(date.date()) for date in missing_dates)
@@ -3361,7 +3379,9 @@ class Helper:
         current_date = dt.date.today()
         previous_month = current_date.replace(day=1) - dt.timedelta(days=1)
         previous_month_name = previous_month.strftime('%B')
-        filename = f"monthly_report_{previous_month_name}.xlsx"
+        previous_year_name = previous_month.strftime('%Y')
+        file_dir = AppUtils.conf['final_reports_dir']
+        filename = f"{file_dir}monthly_report_{previous_month_name}_{previous_year_name}.xlsx"
         if os.path.exists(filename):
             missing_dates = self.check_missing_dates(filename)
             if len(missing_dates) == 0:
@@ -3373,7 +3393,9 @@ class Helper:
 
     def check_previous_missing_dates(self):
         month_name = datetime.now().strftime('%B')
-        filename = f"monthly_report_{month_name}.xlsx"
+        year = datetime.now().strftime('%Y')
+        file_dir = AppUtils.conf['final_reports_dir']
+        filename = f"{file_dir}monthly_report_{month_name}_{year}.xlsx"
         try:
             df = pd.read_excel(filename, index_col=False)
             df['DATE'] = pd.to_datetime(df['DATE'])
@@ -3904,7 +3926,13 @@ class Helper:
                     previous_date=previous_date,
                     status='Upload Complete'
                 )
-                if uploaded_file_count != len(xlsx_files_name_list):
+                done_file_count = self.fetch_call_drop_file_status_count(
+                    brand='Robi',
+                    previous_date=previous_date,
+                    status='Done'
+                )
+                uploaded_and_done_count = uploaded_file_count + done_file_count
+                if uploaded_and_done_count != len(xlsx_files_name_list):
                     # Upload File Into dCRM
                     print("Upload Section")
                     for xlsx_file_name in xlsx_files_name_list:
@@ -3957,7 +3985,13 @@ class Helper:
                     previous_date=previous_date,
                     status='Upload Complete'
                 )
-                if uploaded_file_count != len(xlsx_files_name_list):
+                done_file_count = self.fetch_call_drop_file_status_count(
+                    brand='Airtel',
+                    previous_date=previous_date,
+                    status='Done'
+                )
+                upload_and_done_count = uploaded_file_count + done_file_count
+                if upload_and_done_count != len(xlsx_files_name_list):
                     print("Upload Section")
                     for xlsx_file_name in xlsx_files_name_list:
                         print(f'File Name: {xlsx_file_name}')

@@ -71,9 +71,9 @@ def send_sms_check(format_date):
     return robi_success_sms_count, robi_failed_sms_count, airtel_success_sms_count, airtel_failed_sms_count
 
 
-start = 7
-end = 13
-month = '05'
+start = 19
+end = 28
+month = '07'
 for date in range(start, end, 1):
     if date == 10:
         continue

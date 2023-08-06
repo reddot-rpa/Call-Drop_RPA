@@ -26,8 +26,8 @@ element = webpage.driver.find_element_by_css_selector('option[value = "25"]')
 webpage.driver.execute_script(f'arguments[0].setAttribute("value", "{dcrm_pagination_size}")', element)
 perPage = webpage.driver.find_element_by_id("perPage")
 Select(perPage).select_by_visible_text("25")
-start = 20230507
-end = 20230514
+start = 20230719
+end = 20230728
 for date in range(start, end, 1):
     print(f'Date: {date}\n')
     webpage.driver.find_element_by_name("searchfield").clear()
@@ -47,7 +47,7 @@ for date in range(start, end, 1):
         file_path = f'C:/Users/fin_rpa_admin/Downloads/{file_name_without_ext}.csv'
         if os.path.isfile(file_path):
             if '_air_' in file_name_without_ext:
-                dst_path = f"E:/Rayhan_development/Call-Drop-RPA/files/download_file/airtel/{file_name_without_ext}.csv"
+                dst_path = f"E:/Sunjid_development/Call-Drop-RPA/files/download_file/airtel/{file_name_without_ext}.csv"
                 if not os.path.isfile(dst_path):
                     try:
                         shutil.move(file_path, dst_path)
@@ -62,7 +62,7 @@ for date in range(start, end, 1):
                     except Exception as e:
                         print(f'Unable to Remove File - {file_name} - {e}')
             else:
-                dst_path = f"E:/Rayhan_development/Call-Drop-RPA/files/download_file/robi/{file_name_without_ext}.csv"
+                dst_path = f"E:/Sunjid_development/Call-Drop-RPA/files/download_file/robi/{file_name_without_ext}.csv"
                 if not os.path.isfile(dst_path):
                     try:
                         shutil.move(file_path, dst_path)
