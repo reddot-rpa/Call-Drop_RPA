@@ -64,8 +64,10 @@ class CRMAPI:
     log = Logger.get_instance()
     token = None
 
-    def __init__(self):
-        token = self.accesstoken()
+    #Commenting for mife remove
+
+    # def __init__(self):
+    #     token = self.accesstoken()
 
     def start_time(self):
         date = (str)((datetime.now() - timedelta(days=7)))

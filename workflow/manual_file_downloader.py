@@ -26,8 +26,8 @@ element = webpage.driver.find_element_by_css_selector('option[value = "25"]')
 webpage.driver.execute_script(f'arguments[0].setAttribute("value", "{dcrm_pagination_size}")', element)
 perPage = webpage.driver.find_element_by_id("perPage")
 Select(perPage).select_by_visible_text("25")
-start = 20230719
-end = 20230728
+start = 20240129
+end = 20240130
 for date in range(start, end, 1):
     print(f'Date: {date}\n')
     webpage.driver.find_element_by_name("searchfield").clear()

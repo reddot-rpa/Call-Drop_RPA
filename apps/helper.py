@@ -3313,7 +3313,8 @@ class Helper:
     def sort_report(filename):
         df = pd.read_excel(filename, index_col=False)
         df_sorted = df.sort_values('DATE')
-        df_sorted['DATE'] = df_sorted['DATE'].dt.strftime('%Y-%m-%d')
+        # df_sorted['DATE'] = df_sorted['DATE'].dt.strftime('%Y-%m-%d')
+        df['DATE'] = pd.to_datetime(df['DATE'], errors='coerce')
         df_sorted.to_excel(filename, index=False)
 
     def send_final_reprot_mail(self):

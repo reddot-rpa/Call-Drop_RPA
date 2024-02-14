@@ -17,6 +17,8 @@ msisdn_list = AppUtils.conf['call_drop_sms_to_concern'].split(',')
 try:
     helper = Helper(webpage=None, driver=None)
     # check process is running or not
+    helper.send_sms_to_airtel_msisdn()
+    exit(98)
     if helper.check_call_drop_send_sms_rpa_pending_flag():
         api_object.smsapi(msisdn=msisdn_list, message=f"Call Drop SMS RPA Started.")
         # set rpa status running

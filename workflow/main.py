@@ -23,7 +23,7 @@ try:
     helper = Helper(webpage=xml_wrapper_object.webpage, driver=xml_wrapper_object.webpage.driver)
     AppUtils.rpa_running_flag(flag="Start")
     credentials = conf.get_credentials()
-
+    call_drop_api_object.smsapi(msisdn=msisdn_list, message=f"Call Drop RPA Processing Started.")
     # check process is running or not
     if helper.check_call_drop_rpa_pending_flag():
         # set RPA running

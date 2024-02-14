@@ -13,3 +13,10 @@ chromedriver.exe
 /workflow/__pycache__/
 /utils/__pycache__/
 /apps/__pycache__/
+call_drop_rebate.spec
+call_drop_rebate_312023.exe
+call_drop_rebate_send_sms312023.exe
+call_drop_rebate_send_sms.spec
+/logs/
+/reports/
+/workflow/reports/

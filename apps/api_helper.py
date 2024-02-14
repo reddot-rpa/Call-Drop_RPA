@@ -41,7 +41,54 @@ class RPAApi:
         self.dcrm_complaint_status_update_url = "http://dcrmsoap.robi.com.bd:8080/updaterem2crm/ws/UpdateServiceRequest"
         self.sms_url = "http://10.101.11.164:8888/cgi-bin/sendsms"
         self.call_drop_sms_url = "https://api.appsmsc.robi.com.bd:8443/sms"
-        self.token = self.access_token()
+        self.rpa_alert_sms_url = "https://smsc.robi.com.bd:18312/1/smsmessaging/outbound/RPAalert/requests"
+        self.call_drop_sms_url = "https://smsc.robi.com.bd:18312/1/smsmessaging/outbound/CallDMin/requests"
+        self.rpa_alert_user = AppUtils.conf.get('rpa_alert_user')
+        self.rpa_alert_password = AppUtils.conf.get('rpa_alert_password')
+        self.call_drop_user = AppUtils.conf.get('call_drop_user')
+        self.call_drop_password = AppUtils.conf.get('call_drop_password')
+
+        # self.token = self.access_token()  #Commenting for unusing mife
+
+    def get_sms_api_payload(self, msisdn, sender_name, message):
+        payload = {
+            "outboundSMSMessageRequest":
+                {
+                    "address": [str(msisdn)],
+                    "senderAddress": str(sender_name),
+                    "receiptRequest":
+                        {
+                            "notifyURL": "http://10.135.192.142:8080/notifications/DeliveryInfoNotification",
+                            "callbackData": "12345",
+                            "notificationFormat": "json"
+                        },
+                    "outboundSMSTextMessage":
+                        {
+                            "message": str(message)
+                        }
+                }
+        }
+        return payload
+
+    def get_sms_api_header(self, sender_type='rpa'):
+        headers = None
+        if sender_type == 'rpa':
+            headers = {
+                'X-WSSE': f'UsernameToken Username={self.rpa_alert_user}, PasswordDigest={self.rpa_alert_password}, Nonce="2024012223595900001", Created="2024-01-22T23:59:59Z"',
+                'Authorization': 'WSSE realm="SDP",profile="UsernameToken"',
+                'X-RequestHeader': 'request ServiceId="35000000000018", LinkId="", FA="", OA="", PresentId=""',
+                'Accept': 'application/json',
+                'Content-Type': 'application/json; charset="UTF-8"',
+            }
+        elif sender_type == 'call_drop':
+            headers = {
+                'X-WSSE': f'UsernameToken Username={self.call_drop_user}, PasswordDigest={self.call_drop_password}, Nonce="2024012223595900001", Created="2024-01-22T23:59:59Z"',
+                'Authorization': 'WSSE realm="SDP",profile="UsernameToken"',
+                'X-RequestHeader': 'request ServiceId="35000000000027", LinkId="", FA="", OA="", PresentId=""',
+                'Accept': 'application/json',
+                'Content-Type': 'application/json; charset="UTF-8"'
+            }
+        return headers
 
     def stop_execution(self):
         print('Stopping Execution')
@@ -729,8 +776,7 @@ class RPAApi:
         return api_status
 
     def smsapi(self, msisdn, message):
-        ssl._create_default_https_context = ssl._create_unverified_context
-        message = urllib.parse.quote_plus(message, encoding='UTF-8')
+        message = message.encode('utf-8').decode('unicode-escape')
         msisdn_list = None
         if isinstance(msisdn, list):
             msisdn_list = msisdn
@@ -739,10 +785,12 @@ class RPAApi:
         for msisdn in msisdn_list:
             msisdn = msisdn.replace(' ', '')
             msisdn = AppUtils.msisdn_to_13_digit(msisdn=msisdn)
-            url = f"https://api.appsmsc.robi.com.bd:8443/sms?user=RPAalert&password=RPA@l3rt1%23&src=RPA&dst={msisdn}&msg={message}"
+            url = self.rpa_alert_sms_url
+            headers = self.get_sms_api_header(sender_type='rpa')
+            payload = self.get_sms_api_payload(msisdn=msisdn, sender_name="RPA", message=message)
             try:
-                response = str(urllib.request.urlopen(url).read()).strip("b'")
-                if response.split(":")[0] == "Operation success":
+                response = requests.post(url, headers=headers, data=json.dumps(payload, ensure_ascii=False))
+                if response.status_code == 201:
                     self.log.log_info(
                         f"Success Response Received from APPSMSC : MSISDN - {msisdn}, MSG - {message}, RESPONSE - {response}")
                 else:
@@ -754,47 +802,42 @@ class RPAApi:
 
     def call_drop_smsapi_robi(self, msisdn, msg):
         try:
-            ssl._create_default_https_context = ssl._create_unverified_context
-            sms_url = self.call_drop_sms_url
-            msg = urllib.parse.quote_plus(msg, encoding='UTF-8')
-            final_url = f"{sms_url}?user=CallDropMin&password=C@11Dr0pM!n&src=Robi%20Rebate&dst={msisdn}&msg={msg}&dr=1&type=u"
-            resource = urllib.request.urlopen(final_url)
-            response = resource.read()
-            response = str(response)
-            response = response.strip("b'")
-            print(f'Response - {response}')
-            self.log.log_info(f'Response - {response}')
+            msg = msg.encode('utf-8').decode('unicode-escape')
+            url = self.call_drop_sms_url
+            headers = self.get_sms_api_header(sender_type='call_drop')
+            payload = self.get_sms_api_payload(msisdn=msisdn, sender_name="Robi Rebate", message=msg)
+            response = requests.post(url, headers=headers, data=json.dumps(payload, ensure_ascii=False))
+            self.log.log_info(f'Response - {response.content}')
             time.sleep(AppUtils.conf['sms_send_delay'])
-            if response.split(":")[0] == "Operation success":
-                print(f"Response received from call drop SMS KENEL Detail : MSISDN - {msisdn} MSG - {msg}")
-                self.log.log_info(f"Response received from call drop SMS KENEL Detail : MSISDN - {msisdn} MSG - {msg}")
+            if response.status_code == 201:
+                print(f"Response received from call drop SMS KENEL Detail : MSISDN - {msisdn} MSG - {msg.encode('utf-8')}")
+                self.log.log_info(f"Response received from call drop SMS KENEL Detail : MSISDN - {msisdn} MSG - {msg.encode('utf-8')}")
             else:
-                print(f"Response received from call drop SMS KENEL Detail : MSISDN - {msisdn} MSG - {msg}")
-                self.log.log_critical(f"Failed Response received from SMS KENEL Detail : MSISDN - {msisdn} MSG - {msg} RESPONSE - {response}")
+                print(f"Response received from call drop SMS KENEL Detail : MSISDN - {msisdn} MSG - {msg.encode('utf-8')}")
+                self.log.log_critical(f"Failed Response received from SMS KENEL Detail : MSISDN - {msisdn} MSG - {msg.encode('utf-8')} RESPONSE - {response}")
         except requests.exceptions.RequestException as e:
             self.log.log_critical(
-                f"Unable to connect to SMS KENEL GATE WAY Details : For MSISDN - {msisdn} MESSAGE - {msg} EXCEPTION - {e}")
+                f"Unable to connect to SMS KENEL GATE WAY Details : For MSISDN - {msisdn} MESSAGE - {msg.encode('utf-8')} EXCEPTION - {e}")
 
     def call_drop_smsapi_airtel(self, msisdn, msg):
         try:
-            ssl._create_default_https_context = ssl._create_unverified_context
-            sms_url = self.call_drop_sms_url
-            msg = urllib.parse.quote_plus(msg, encoding='UTF-8')
-            final_url = f"{sms_url}?user=CallDropMin&password=C@11Dr0pM!n&src=AT%20Rebate&dst={msisdn}&msg={msg}&dr=1&type=u"
-            print(final_url)
-            resource = urllib.request.urlopen(final_url)
-            response = resource.read()
-            response = str(response)
-            response = response.strip("b'")
-            print(f'Response - {response}')
+            msg = msg.encode('utf-8').decode('unicode-escape')
+            url = self.call_drop_sms_url
+            headers = self.get_sms_api_header(sender_type='call_drop')
+            payload = self.get_sms_api_payload(msisdn=msisdn, sender_name="AT Rebate", message=msg)
+            response = requests.post(url, headers=headers, data=json.dumps(payload, ensure_ascii=False))
             self.log.log_info(f'Response - {response}')
             time.sleep(AppUtils.conf['sms_send_delay'])
-            if response.split(":")[0] == "Operation success":
-                print(f"Response received from call drop SMS KENEL Detail : MSISDN - {msisdn} MSG - {msg}")
-                self.log.log_info(f"Response received from call drop SMS KENEL Detail : MSISDN - {msisdn} MSG - {msg}")
+            if response.status_code == 201:
+                print(
+                    f"Response received from call drop SMS KENEL Detail : MSISDN - {msisdn} MSG - {msg.encode('utf-8')}")
+                self.log.log_info(
+                    f"Response received from call drop SMS KENEL Detail : MSISDN - {msisdn} MSG - {msg.encode('utf-8')}")
             else:
-                print(f"Response received from call drop SMS KENEL Detail : MSISDN - {msisdn} MSG - {msg}")
-                self.log.log_critical(f"Failed Response received from SMS KENEL Detail : MSISDN - {msisdn} MSG - {msg} RESPONSE - {response}")
+                print(
+                    f"Response received from call drop SMS KENEL Detail : MSISDN - {msisdn} MSG - {msg.encode('utf-8')}")
+                self.log.log_critical(
+                    f"Failed Response received from SMS KENEL Detail : MSISDN - {msisdn} MSG - {msg.encode('utf-8')} RESPONSE - {response}")
         except requests.exceptions.RequestException as e:
             self.log.log_critical(
-                f"Unable to connect to SMS KENEL GATE WAY Details : For MSISDN - {msisdn} MESSAGE - {msg} EXCEPTION - {e}")
+                f"Unable to connect to SMS KENEL GATE WAY Details : For MSISDN - {msisdn} MESSAGE - {msg.encode('utf-8')} EXCEPTION - {e}")
