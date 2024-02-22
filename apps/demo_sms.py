@@ -53,7 +53,7 @@ class AlertModule:
                     'Content-Length': str(len(trimmed_message))
                 }
                 # POST request
-                response = requests.post(url, headers=headers, data=json.dumps(payload))
+                response = requests.post(url, headers=headers, data=json.dumps(payload,  ensure_ascii=False))
                 print(response.content)
                 status_dict.update({msisdn: response.status_code})
 
@@ -64,6 +64,6 @@ class AlertModule:
 
 # Create an instance of the AlertModule class
 alert_module = AlertModule()
-result = alert_module.send_sms(["8801833184145"], "Banglalink", "Hi, Mohammad Rashed Imam. Excited to apply for the Lead Software Engineer role. Contact me at 8801991923466. Looking forward to the opportunity. Thanks!")
+result = alert_module.send_sms(["01833183766","01833184087","01817182296","01877870668"], "CallDrop", "ব্যবহার করতে পারবেন যেকোনো এয়ারটেল নম্বর এ। ব্যালান্স চেক করতে ডায়াল *778*31# কলড্রপের বিস্তারিত জানতে ডায়াল *121*765#")
 
 print(result)
