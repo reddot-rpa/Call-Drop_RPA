@@ -13,8 +13,8 @@ class AlertModule:
             trimmed_message = trimmed_message.encode('utf-8').decode('unicode-escape')
             for msisdn in msisdns:
                 # REST request URL
-                # url = "https://smsc.robi.com.bd:18312/1/smsmessaging/outbound/RPAalert/requests"  #RPA
-                url = "https://smsc.robi.com.bd:18312/1/smsmessaging/outbound/CallDMin/requests"   # Call Drop
+                url = "https://smsc.robi.com.bd:18312/1/smsmessaging/outbound/RPAalert/requests"  #RPA
+                # url = "https://smsc.robi.com.bd:18312/1/smsmessaging/outbound/CallDMin/requests"   # Call Drop
                 # structured JSON
                 payload = {
                     "outboundSMSMessageRequest":
@@ -64,6 +64,6 @@ class AlertModule:
 
 # Create an instance of the AlertModule class
 alert_module = AlertModule()
-result = alert_module.send_sms(["01833183766","01833184087","01817182296","01877870668"], "CallDrop", "ব্যবহার করতে পারবেন যেকোনো এয়ারটেল নম্বর এ। ব্যালান্স চেক করতে ডায়াল *778*31# কলড্রপের বিস্তারিত জানতে ডায়াল *121*765#")
+result = alert_module.send_sms(["01833184087"], "RPA", "ব্যবহার করতে পারবেন যেকোনো এয়ারটেল নম্বর এ। ব্যালান্স চেক করতে ডায়াল *778*31# কলড্রপের বিস্তারিত জানতে ডায়াল *121*765#")
 
 print(result)

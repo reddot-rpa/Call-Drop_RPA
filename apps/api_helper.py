@@ -807,11 +807,11 @@ class RPAApi:
             headers = self.get_sms_api_header(sender_type='call_drop')
             payload = self.get_sms_api_payload(msisdn=msisdn, sender_name="Robi Rebate", message=msg)
             response = requests.post(url, headers=headers, data=json.dumps(payload, ensure_ascii=False))
-            self.log.log_info(f'Response - {response.content}')
+            self.log.log_info(f'Response - {response.status_code}')
             time.sleep(AppUtils.conf['sms_send_delay'])
             if response.status_code == 201:
                 print(f"Response received from call drop SMS KENEL Detail : MSISDN - {msisdn} MSG - {msg.encode('utf-8')}")
-                self.log.log_info(f"Response received from call drop SMS KENEL Detail : MSISDN - {msisdn} MSG - {msg.encode('utf-8')}")
+                self.log.log_info(f"Response received from call drop SMS KENEL Detail : MSISDN - {msisdn}")
             else:
                 print(f"Response received from call drop SMS KENEL Detail : MSISDN - {msisdn} MSG - {msg.encode('utf-8')}")
                 self.log.log_critical(f"Failed Response received from SMS KENEL Detail : MSISDN - {msisdn} MSG - {msg.encode('utf-8')} RESPONSE - {response}")
@@ -826,16 +826,16 @@ class RPAApi:
             headers = self.get_sms_api_header(sender_type='call_drop')
             payload = self.get_sms_api_payload(msisdn=msisdn, sender_name="AT Rebate", message=msg)
             response = requests.post(url, headers=headers, data=json.dumps(payload, ensure_ascii=False))
-            self.log.log_info(f'Response - {response}')
+            self.log.log_info(f'Response - {response.status_code}')
             time.sleep(AppUtils.conf['sms_send_delay'])
             if response.status_code == 201:
                 print(
-                    f"Response received from call drop SMS KENEL Detail : MSISDN - {msisdn} MSG - {msg.encode('utf-8')}")
+                    f"Response received from call drop SMS KENEL Detail : MSISDN - {msisdn}")
                 self.log.log_info(
-                    f"Response received from call drop SMS KENEL Detail : MSISDN - {msisdn} MSG - {msg.encode('utf-8')}")
+                    f"Response received from call drop SMS KENEL Detail : MSISDN - {msisdn}")
             else:
                 print(
-                    f"Response received from call drop SMS KENEL Detail : MSISDN - {msisdn} MSG - {msg.encode('utf-8')}")
+                    f"Response received from call drop SMS KENEL Detail : MSISDN - {msisdn}")
                 self.log.log_critical(
                     f"Failed Response received from SMS KENEL Detail : MSISDN - {msisdn} MSG - {msg.encode('utf-8')} RESPONSE - {response}")
         except requests.exceptions.RequestException as e:
