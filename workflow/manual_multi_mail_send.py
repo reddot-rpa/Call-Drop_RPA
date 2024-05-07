@@ -71,16 +71,16 @@ def send_sms_check(format_date):
     return robi_success_sms_count, robi_failed_sms_count, airtel_success_sms_count, airtel_failed_sms_count
 
 
-start = 6
-end = 7
-month = '08'
+start = 12
+end = 15
+month = '04'
 for date in range(start, end, 1):
     if date == 10:
         continue
     if len(str(date)) == 1:
         date = '0' + str(date)
-    mail_date = f'{date}-{month}-2023'
-    format_date = f"2023{month}{date}"
+    mail_date = f'{date}-{month}-2024'
+    format_date = f"2024{month}{date}"
     print(f'Date: {mail_date}\n')
     robi_success_sms_count, robi_failed_sms_count, airtel_success_sms_count, airtel_failed_sms_count = send_sms_check(format_date)
     targets = conf.get_call_drop_report_email_to()
@@ -186,4 +186,4 @@ for date in range(start, end, 1):
     print("Final mail has been sent successfully to: ", targets)
     # Send sms to concern
     msisdn_list = ['8801833184089']
-    crm_api_object.smsapi(msisdn=msisdn_list, message=f"Call Drop Rebate Email Mail Sent - {mail_date}")
+    # crm_api_object.smsapi(msisdn=msisdn_list, message=f"Call Drop Rebate Email Mail Sent - {mail_date}")

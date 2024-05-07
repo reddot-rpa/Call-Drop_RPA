@@ -23,10 +23,10 @@ try:
         helper.set_call_drop_send_sms_rpa_running_flag()
         # Check time period Then sent sms to msisdn
         if helper.is_now_in_time_period():
-            helper.send_sms_to_robi_msisdn()
-            helper.send_sms_to_airtel_msisdn()
             # Send mail to the user
             helper.send_mail()
+            helper.send_sms_to_robi_msisdn()
+            helper.send_sms_to_airtel_msisdn()
         else:
             print("Time is out of range")
             log.log_info(msg="Time is out of range")

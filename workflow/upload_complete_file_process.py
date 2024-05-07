@@ -44,7 +44,7 @@ for file_name in upload_complete_files:
     webpage.driver.find_element_by_name("searchfield").clear()
     webpage.driver.find_element_by_name("searchfield").send_keys(file_name)
     webpage.driver.find_element_by_css_selector("button.btn.btn-danger.btn-xs.tblSearch").click()
-    time.sleep(2)
+    time.sleep(5)
     table = webpage.driver.find_element_by_tag_name('tbody')
     table_row = table.find_elements_by_tag_name('tr')
     for row in table_row:
@@ -53,7 +53,7 @@ for file_name in upload_complete_files:
         print(f'File Name: {file_name}')
         file_download_url = f'https://dcrm.robi.com.bd/dcrm/bulk/postpaid/ajx/downloadBulkReport?fileId={file_id}&filename={file_name}'
         driver.get(file_download_url)
-        time.sleep(1)
+        time.sleep(2)
         file_name_without_ext = file_name.split('.')[0]
         file_path = f'C:/Users/fin_rpa_admin/Downloads/{file_name_without_ext}.csv'
         if os.path.isfile(file_path):
