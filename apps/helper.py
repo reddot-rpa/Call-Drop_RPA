@@ -2999,7 +2999,7 @@ class Helper:
         # or zipfile.ZIP_STORED to just store the file
         compression = zipfile.ZIP_DEFLATED
 
-        date_today = dt.date.today() - dt.timedelta(days=AppUtils.conf['mail_send_day'])
+        date_today = dt.date.today() - dt.timedelta(days=AppUtils.conf['previous_email_day'])
         date_today = date_today.strftime("%Y%m%d")
         # date_today = '20211106'
 
@@ -3062,7 +3062,7 @@ class Helper:
             print(e)
 
     def send_sms_check(self):
-        date_today = dt.date.today() - dt.timedelta(days=AppUtils.conf['mail_send_day'])
+        date_today = dt.date.today() - dt.timedelta(days=AppUtils.conf['previous_email_day'])
         date_today = date_today.strftime("%Y%m%d")
         robi_sms_status_count_query = f"SELECT COUNT(CASE SMS_STATUS WHEN 'Sent' THEN 1 END) AS SUCCESS, " \
                                       f"COUNT(CASE SMS_STATUS WHEN 'Failed' THEN 1 END) AS FAILED " \
@@ -3235,7 +3235,7 @@ class Helper:
         done_status_file_list = list()
         equal_flag = False
         try:
-            date_today = dt.date.today() - dt.timedelta(days=AppUtils.conf['mail_send_day'])
+            date_today = dt.date.today() - dt.timedelta(days=AppUtils.conf['previous_email_day'])
             date_today = date_today.strftime("%Y%m%d")
             # date_today = '20211106'
 
@@ -3277,7 +3277,7 @@ class Helper:
         if os.path.exists(filename):
             df = pd.read_excel(filename, index_col=False)
             dic = {
-                "DATE": dt.date.today() - dt.timedelta(days=AppUtils.conf['mail_send_day']),
+                "DATE": dt.date.today() - dt.timedelta(days=AppUtils.conf['previous_email_day']),
                 "ROBI": total_unique_subscribe_robi,
                 "AIRTEL": total_unique_subscribe_airtel,
                 "TOTAL": total_unique_subscribe_robi + total_unique_subscribe_airtel
@@ -3423,7 +3423,7 @@ class Helper:
             attachments = attach_file_dir
 
             current_date = dt.date.today()
-            date_today = dt.date.today() - dt.timedelta(days=AppUtils.conf['mail_send_day'])
+            date_today = dt.date.today() - dt.timedelta(days=AppUtils.conf['previous_email_day'])
             format_date = date_today.strftime("%Y%m%d")
             mail_send_date = current_date.strftime("%Y%m%d")
             date_today = date_today.strftime("%d-%m-%Y")
@@ -3529,17 +3529,17 @@ class Helper:
             # Send sms to concern
             msisdn_list = ['8801833184089', '8801833184087', '8801833183769']
             crm_api_object.smsapi(msisdn=msisdn_list, message="Call Drop Rebate Email Mail Sent!")
-            # self.update_daily_mail_status_to_file(total_unique_subscribe_robi, total_unique_subscribe_airtel)
-            # self.log.log_info("Checking Previous missing dates ")
-            # missing_dates = self.check_previous_missing_dates()
-            # if len(missing_dates) > 0:
-            #     self.send_previous_missing_dates_to_dev(missing_dates)
-            # today_date = dt.date.today()
-            # final_report_date = AppUtils.conf['final_report_date']
-            # is_final_date = today_date.day == final_report_date
-            # if is_final_date:
-            #     self.log.log_info("Sending final report mail")
-            #     self.send_final_monthly_report()
+            self.update_daily_mail_status_to_file(total_unique_subscribe_robi, total_unique_subscribe_airtel)
+            self.log.log_info("Checking Previous missing dates ")
+            missing_dates = self.check_previous_missing_dates()
+            if len(missing_dates) > 0:
+                self.send_previous_missing_dates_to_dev(missing_dates)
+            today_date = dt.date.today()
+            final_report_date = AppUtils.conf['final_report_date']
+            is_final_date = today_date.day == final_report_date
+            if is_final_date:
+                self.log.log_info("Sending final report mail")
+                self.send_final_monthly_report()
 
     def upload_file_dcrm(self, xlsx_file_name, xlsx_file_dir_name):
         try:

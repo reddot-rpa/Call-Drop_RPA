@@ -58,7 +58,6 @@
   "not_success_sms": "Dear Customer, you are not elegible to get adjustment.",
   "mail_config_flag": "prod",
   "previous_email_day": 1,
-  "mail_send_day": 2,
   "sms_send_delay": 0,
   "final_report_date": 3,
   "final_reports_dir": "../reports/",
