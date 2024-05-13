@@ -3527,7 +3527,7 @@ class Helper:
             update_query = "update CALL_DROP_RPA_STATUS_FLAG set MAIL_STATUS='Mail_Sent', MAIL_SEND_DATE='" + mail_send_date + "' where DEFAULT_EMAIL='calldrop@robi.com.bd'"
             db_object.execute_query(query=update_query)
             # Send sms to concern
-            msisdn_list = ['8801833184089', '8801833184087', '8801833183769']
+            msisdn_list = AppUtils.conf['call_drop_sms_to_concern'].split(',')
             crm_api_object.smsapi(msisdn=msisdn_list, message="Call Drop Rebate Email Mail Sent!")
             # self.update_daily_mail_status_to_file(total_unique_subscribe_robi, total_unique_subscribe_airtel)
             # self.log.log_info("Checking Previous missing dates ")
